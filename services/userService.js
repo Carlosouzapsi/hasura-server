@@ -5,7 +5,7 @@ class UserService {
     const mutation = {
       query: `
        mutation($name: String!, $email: String!){
-        insert_users(objects: { name: $name, email: $email }){
+        insert_Users_one(objects: { name: $name, email: $email }){
           returning {
             id
             name
