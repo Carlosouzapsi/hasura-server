@@ -17,14 +17,10 @@ describe("createUserService", () => {
     const mockResponse = {
       data: {
         data: {
-          insert_users: {
-            returning: [
-              {
-                id: mockUserId,
-                name,
-                email,
-              },
-            ],
+          insert_Users_one: {
+            id: mockUserId,
+            name,
+            email,
           },
         },
       },
@@ -32,7 +28,6 @@ describe("createUserService", () => {
 
     // Response mocked from axios
     hasuraClient.post.mockResolvedValueOnce(mockResponse);
-
     // execute service method
     const result = await userService.createUserService(name, email);
 
@@ -43,7 +38,7 @@ describe("createUserService", () => {
     });
 
     expect(result).toEqual({
-      id: expect.any(String),
+      id: expect.any(String), // Verifica se o id está definido
       name,
       email,
     });

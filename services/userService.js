@@ -5,12 +5,10 @@ class UserService {
     const mutation = {
       query: `
        mutation($name: String!, $email: String!){
-        insert_Users_one(objects: { name: $name, email: $email }){
-          returning {
+        insert_Users_one(object: { name: $name, email: $email }){
             id
             name
             email
-          }
         }
       }`,
       variables: {
@@ -20,14 +18,14 @@ class UserService {
     };
 
     const response = await hasuraClient.post("", mutation);
-    return response.data.data.insert_users.returning[0];
+    return response.data.data.insert_Users_one;
   }
 
   async getUsersService() {
     const query = {
       query: `
         query {
-          users {
+          Users {
             id
             name
             email
@@ -37,7 +35,7 @@ class UserService {
     };
 
     const response = await hasuraClient.post("", query);
-    return response.data.data.users;
+    return response.data.data.Users;
   }
 }
 
