@@ -14,6 +14,14 @@ describe("createUserService", () => {
     const email = "john.doe@example.com";
     const mockUserId = uuidv4(); // UUID
 
+    const mockCheckEmailResponse = {
+      data: {
+        data: {
+          Users: [], // Simulando que o e-mail não existe no banco
+        },
+      },
+    };
+
     const mockResponse = {
       data: {
         data: {
@@ -25,6 +33,9 @@ describe("createUserService", () => {
         },
       },
     };
+
+    // Mock para a verificação do e-mail
+    hasuraClient.post.mockResolvedValueOnce(mockCheckEmailResponse);
 
     // Response mocked from axios
     hasuraClient.post.mockResolvedValueOnce(mockResponse);
