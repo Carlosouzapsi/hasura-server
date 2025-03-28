@@ -1,19 +1,28 @@
 const hasuraClient = require("./hasuraClient");
+const USER_QUERIES = require("./queries/userQueries");
+const userQueries = require("./queries/userQueries");
+const { ConflictError } = require("../middlewares/apiErrors");
 
 class UserService {
-  async createUserService(name, email) {
+  async createUserService(name, email, password) {
+    const verifyEmailQuery = {
+      query: USER_QUERIES.VERIFY_EMAIL,
+      variables: {
+        email,
+      },
+    };
+
+    const checkResponse = await hasuraClient.post("", verifyEmailQuery);
+
+    if (checkResponse.data.data.Users.length > 0) {
+      throw new ConflictError("Email already exists");
+    }
     const mutation = {
-      query: `
-       mutation($name: String!, $email: String!){
-        insert_Users_one(object: { name: $name, email: $email }){
-            id
-            name
-            email
-        }
-      }`,
+      query: userQueries.CREATE_USER,
       variables: {
         name,
         email,
+        password,
       },
     };
 
@@ -23,15 +32,7 @@ class UserService {
 
   async getUsersService() {
     const query = {
-      query: `
-        query {
-          Users {
-            id
-            name
-            email
-          }
-        }
-      `,
+      query: USER_QUERIES.GET_USERS,
     };
 
     const response = await hasuraClient.post("", query);

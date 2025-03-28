@@ -43,4 +43,30 @@ describe("createUserService", () => {
       email,
     });
   });
+  it("Should list all the registered users", async () => {
+    const mockUsers = [
+      { id: uuidv4(), name: "John Doe", email: "john.doe@example.com" },
+      { id: uuidv4(), name: "Jane Doe", email: "jane.doe@example.com" },
+    ];
+
+    const mockResponse = {
+      data: {
+        data: {
+          Users: mockUsers,
+        },
+      },
+    };
+
+    // Response mocked from axios
+    hasuraClient.post.mockResolvedValueOnce(mockResponse);
+
+    // execute service method
+    const result = await userService.getUsersService();
+
+    expect(hasuraClient.post).toHaveBeenCalledWith("", {
+      query: expect.stringContaining("query"),
+    });
+
+    expect(result).toEqual(mockUsers);
+  });
 });

@@ -1,24 +1,22 @@
 const userService = require("../services/userService");
 
 class UserController {
-  async fetchUsers(req, res) {
+  async fetchUsers(req, res, next) {
     try {
       const users = await userService.getUsersService();
       res.json(users);
     } catch (error) {
-      console.error("Erro ao buscar usuários:", error);
-      res.status(500).json({ error: "Erro interno do servidor" });
+      next(error);
     }
   }
 
-  async createUser(req, res) {
-    const { name, email } = req.body;
+  async createUser(req, res, next) {
+    const { name, email, password } = req.body;
     try {
-      const user = await userService.createUserService(name, email);
+      const user = await userService.createUserService(name, email, password);
       res.status(201).json(user);
     } catch (error) {
-      console.error("Erro ao criar usuário: ", error);
-      res.status(500).json({ error: "Erro interno do servidor" });
+      next(error);
     }
   }
 }
