@@ -23,6 +23,16 @@ const USER_QUERIES = {
           email
         }
       }`,
+
+  GET_USERS_BY_EMAIL: `
+  query GetUserByEmail($email: String!) {
+    Users(where: {email: {_eq: $email}}) {
+      id
+      name
+      email
+      password
+    }
+  }`,
 };
 
 module.exports = USER_QUERIES;

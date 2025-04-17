@@ -2,6 +2,7 @@ const hasuraClient = require("./hasuraClient");
 const USER_QUERIES = require("./queries/userQueries");
 const userQueries = require("./queries/userQueries");
 const { ConflictError } = require("../middlewares/apiErrors");
+const generateToken = require("../utils/utils");
 
 class UserService {
   async createUserService(name, email, password) {
@@ -36,7 +37,17 @@ class UserService {
     };
 
     const response = await hasuraClient.post("", query);
-    return response.data.data.Users;
+    const newUser = response.data.data.Users;
+    return newUser;
+    // Generates user token
+    const token = generateToken(newUser.id, "user");
+  }
+
+  async userLoginService(email, password) {
+    const query = {
+      query: userQueries.VERIFY_EMAIL,
+      variables: { email },
+    };
   }
 }
 
