@@ -1,7 +1,7 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
-const SECRET_KEY = process.env.JWT_SECRET;
+const SECRET_KEY = process.env.HASURA_GRAPHQL_JWT_SECRET;
 
 function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;

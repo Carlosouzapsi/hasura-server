@@ -1,7 +1,8 @@
 const hasuraClient = require("./hasuraClient");
+const bcrypt = require("bcryptjs");
 const USER_QUERIES = require("./queries/userQueries");
 const userQueries = require("./queries/userQueries");
-const { ConflictError } = require("../middlewares/apiErrors");
+const { ConflictError, ApiError } = require("../middlewares/apiErrors");
 const generateToken = require("../utils/utils");
 
 class UserService {
@@ -28,25 +29,61 @@ class UserService {
     };
 
     const response = await hasuraClient.post("", mutation);
-    return response.data.data.insert_Users_one;
+    const newUser = response.data.data.insert_Users_one;
+
+    const token = generateToken(newUser.id, "user");
+
+    return {
+      user: {
+        id: newUser.id,
+        name: newUser.name,
+        email: newUser.email,
+      },
+      token,
+    };
   }
 
   async getUsersService() {
-    const query = {
-      query: USER_QUERIES.GET_USERS,
-    };
-
-    const response = await hasuraClient.post("", query);
-    const newUser = response.data.data.Users;
-    return newUser;
-    // Generates user token
-    const token = generateToken(newUser.id, "user");
+    try {
+      const query = {
+        query: USER_QUERIES.GET_USERS,
+      };
+      const response = await hasuraClient.post("", query);
+      const users = response.data.data.Users;
+      return users;
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async userLoginService(email, password) {
     const query = {
-      query: userQueries.VERIFY_EMAIL,
+      query: userQueries.GET_USERS_BY_EMAIL,
       variables: { email },
+    };
+    const response = await hasuraClient.post("", query);
+    const users = response.data.data.Users;
+
+    if (!users || users.length === 0) {
+      throw new ApiError(404, "user not found.");
+    }
+    const user = users[0];
+
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    
+    if (!passwordMatch) {
+      throw new ApiError(401, "unauthorized");
+    }
+
+    const token = generateToken(user.id, "user");
+
+    return {
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      },
+      token,
     };
   }
 }

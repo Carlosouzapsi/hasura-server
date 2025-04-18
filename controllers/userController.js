@@ -19,6 +19,22 @@ class UserController {
       next(error);
     }
   }
+
+  async userLogin(req, res, next) {
+    const { email, password } = await req.body;
+
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ message: "Email and password are mandatory" });
+    }
+    try {
+      const user = await userService.userLoginService(email, password);
+      return user;
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = UserController;

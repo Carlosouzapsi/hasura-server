@@ -13,7 +13,9 @@ function generateToken(userId, role = "user") {
     },
   };
 
-  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
+  return jwt.sign(payload, process.env.HASURA_GRAPHQL_JWT_SECRET, {
+    expiresIn: "1h",
+  });
 }
 
 module.exports = generateToken;
