@@ -375,3 +375,7 @@
 [2025-04-19T02:34:52.835Z] INFO: POST /api/users/login - 200 - 123ms
 [2025-04-19T02:34:58.292Z] INFO: POST /api/users/login - 200 - 102ms
 [2025-04-19T02:34:58.986Z] INFO: POST /api/users/login - 200 - 107ms
+[2025-04-19T02:39:20.889Z] INFO: GET /api/users - 401 - 8ms
+[2025-04-19T02:39:21.876Z] INFO: GET /api/users - 401 - 1ms
+[2025-04-19T02:39:37.391Z] INFO: GET /api/users - 200 - 57ms
+[2025-04-19T02:39:47.928Z] INFO: POST /api/users - 401 - 1ms
