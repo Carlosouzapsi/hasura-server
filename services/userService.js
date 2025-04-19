@@ -19,12 +19,16 @@ class UserService {
     if (checkResponse.data.data.Users.length > 0) {
       throw new ConflictError("Email already exists");
     }
+
+    // 🔐 Criptografar senha antes de salvar
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const mutation = {
       query: userQueries.CREATE_USER,
       variables: {
         name,
         email,
-        password,
+        password: hashedPassword,
       },
     };
 
@@ -70,7 +74,7 @@ class UserService {
     const user = users[0];
 
     const passwordMatch = await bcrypt.compare(password, user.password);
-    
+
     if (!passwordMatch) {
       throw new ApiError(401, "unauthorized");
     }

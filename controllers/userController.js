@@ -22,15 +22,14 @@ class UserController {
 
   async userLogin(req, res, next) {
     const { email, password } = await req.body;
-
-    if (!email || !password) {
-      return res
-        .status(400)
-        .json({ message: "Email and password are mandatory" });
-    }
     try {
+      if (!email || !password) {
+        return res
+          .status(400)
+          .json({ message: "Email and password are mandatory" });
+      }
       const user = await userService.userLoginService(email, password);
-      return user;
+      return res.status(200).json(user);
     } catch (error) {
       next(error);
     }
