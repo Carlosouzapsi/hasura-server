@@ -379,3 +379,4 @@
 [2025-04-19T02:39:21.876Z] INFO: GET /api/users - 401 - 1ms
 [2025-04-19T02:39:37.391Z] INFO: GET /api/users - 200 - 57ms
 [2025-04-19T02:39:47.928Z] INFO: POST /api/users - 401 - 1ms
+[2025-04-28T11:03:22.721Z] INFO: POST /api/users - 201 - 163ms

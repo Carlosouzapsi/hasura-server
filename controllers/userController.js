@@ -12,6 +12,7 @@ class UserController {
 
   async createUser(req, res, next) {
     const { name, email, password } = req.body;
+
     try {
       const user = await userService.createUserService(name, email, password);
       res.status(201).json(user);
@@ -22,6 +23,7 @@ class UserController {
 
   async userLogin(req, res, next) {
     const { email, password } = await req.body;
+
     try {
       if (!email || !password) {
         return res
